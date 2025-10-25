@@ -25,7 +25,7 @@ var board = JXG.JSXGraph.initBoard(divid, { showInfobox: true,showCopyright:fals
       }
     },
     y: {
-      name: ,
+      name:{#ytitle#} ,
       withLabel: true,
 label: {
 	position: 'rt',
