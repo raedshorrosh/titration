@@ -1,0 +1,85 @@
+[[jsxgraph width="800px" height="800px"]]
+JXG.Options.text.cssDefaultStyle += ';direction:ltr;'
+JXG.Options.text.fontSize = 16;
+JXG.Options.axis.highlight = false;
+
+var board = JXG.JSXGraph.initBoard(divid, { showInfobox: true,showCopyright:false,showNavigation:false,axis:true, pan: {enabled:true},defaultAxes: {
+    x: {
+     name: {#xtitle#},
+      withLabel: true,
+      label: {
+        	position: 'rt',
+		fontSize: 18,
+          	offset: [-60, -30]
+             },
+      ticks: {
+        label: {
+          visible: true,
+          anchorX: 'middle',
+          anchorY: 'top',
+          fontSize: 18,
+          offset: [0, -3]
+        },
+        drawZero: false,
+        visible: 'inherit'
+      }
+    },
+    y: {
+      name: ,
+      withLabel: true,
+label: {
+	position: 'rt',
+	fontSize: 18,
+        rotate:90,
+        offset: [-40, -100],
+        display: 'internal',
+      },
+      ticks: {
+        label: {
+          visible:true,
+          anchorX: 'right',
+          anchorY: 'middle',
+          fontSize: 18,
+          offset: [-6, 0]
+        },
+        tickEndings: [1, 0],
+        drawZero: false,
+        visible: true   
+      }
+    }
+  } });
+
+
+board.highlightInfobox = function(x, y , el) {
+		this.infobox.setText('<span style="color:black;font-weight:bold">'+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+y + 'M' +'</span>');
+};
+
+var p1 = [], p2=[],p3=[],p4=[],p5=[],col = 'red'; 
+var x1={#x1#},x2={#x2#},x3={#x3#},x4={#x4#},x5={#x5#};
+
+var mmin=0
+var mmax=Math.max(x1[0],x1[1],x2[0],x2[1],x3[0],x3[1],x4[0],x4[1],x5[2]);
+var crvcol=['green','blue','orange','magenta'];
+//randomize colors
+crvcol.sort(function(a, b){return 0.5 - Math.random()}); 
+
+board.setBoundingBox([0,50,mmax,0]);
+board.fullUpdate();
+// 1. Define the three points
+var p1 = board.create('point',x1, {name: 'A'});
+var p2 = board.create('point',x2, {name: 'B'});
+var p3 = board.create('point',x3, {name: 'C'});
+var p4 = board.create('point',x4, {name: 'D'});
+
+// 2. Create the polygonal chain
+// This creates a segment from A to B, and a second segment from B to C.
+var chain = board.create('polygonalchain', [p1, p2, p3,p4], {
+    strokeColor: 'red',
+    strokeWidth: 3
+});
+
+
+board.fullUpdate(); 
+
+ [[/jsxgraph]]
+ 
