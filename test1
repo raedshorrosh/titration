@@ -3,77 +3,121 @@ JXG.Options.text.cssDefaultStyle += ';direction:ltr;'
 JXG.Options.text.fontSize = 16;
 JXG.Options.axis.highlight = false;
 
-var board = JXG.JSXGraph.initBoard(divid, { showInfobox: true,showCopyright:false,showNavigation:false,axis:true, pan: {enabled:true},defaultAxes: {
-    x: {
-     name: {#xtitle#},
-      withLabel: true,
-      label: {
-        	position: 'rt',
-		fontSize: 18,
-          	offset: [-60, -30]
-             },
-      ticks: {
-        label: {
-          visible: true,
-          anchorX: 'middle',
-          anchorY: 'top',
-          fontSize: 18,
-          offset: [0, -3]
-        },
-        drawZero: false,
-        visible: 'inherit'
-      }
-    },
-    y: {
-      name:{#ytitle#} ,
-      withLabel: true,
-label: {
-	position: 'rt',
-	fontSize: 18,
-        rotate:90,
-        offset: [-40, -100],
-        display: 'internal',
-      },
-      ticks: {
-        label: {
-          visible:true,
-          anchorX: 'right',
-          anchorY: 'middle',
-          fontSize: 18,
-          offset: [-6, 0]
-        },
-        tickEndings: [1, 0],
-        drawZero: false,
-        visible: true   
-      }
-    }
-  } });
+// --- 1. Data and Margin Definitions ---
+var x1={#x1#},x2={#x2#},x3={#x3#},x4={#x4#},x5={#x5#};
+var allPoints=[x1,x2,x3,x4,x5];
 
+// Define container size and margins in pixels
+var containerSize = 800;
+// 🔥 INCREASED MARGINS
+var leftMargin = 60;   // Guaranteed space for Y-axis labels
+var bottomMargin = 60; // Guaranteed space for X-axis labels
+var topRightMargin = 20; // Small buffer for the other edges
 
+// Calculate available plotting space in pixels
+var plottingWidth = containerSize - leftMargin - topRightMargin;   
+var plottingHeight = containerSize - bottomMargin - topRightMargin; 
+
+// --- 2. Scaling Calculation ---
+// Get the maximum x and y values from your data. Use a default of 10 if data is empty.
+var maxX_data = Math.max.apply(null, allPoints.map(p => p[0])) || 10;
+var maxY_data = Math.max.apply(null, allPoints.map(p => p[1])) || 10;
+
+// Add a 5% buffer to the max data value
+var bufferFactor = 1.05; 
+var max_X_with_buffer = maxX_data * bufferFactor;
+var max_Y_with_buffer = maxY_data * bufferFactor;
+
+// Calculate the units (pixels per user unit)
+var calculatedUnitX = plottingWidth / max_X_with_buffer; 
+var calculatedUnitY = plottingHeight / max_Y_with_buffer; 
+
+// Define the pixel coordinates for the origin (0,0)
+var origin_x_pixel = leftMargin; 
+var origin_y_pixel = containerSize - bottomMargin; 
+
+// --- 3. Board Initialization ---
+var board = JXG.JSXGraph.initBoard(divid, { 
+    showInfobox: true,
+    showCopyright:false,
+    showNavigation:false,
+    axis:true, 
+    pan: {enabled:true},
+    
+    // Set origin and units using the calculated values
+    originX: origin_x_pixel,  
+    originY: origin_y_pixel,
+    unitX: calculatedUnitX, 
+    unitY: calculatedUnitY,
+    
+    defaultAxes: {
+        x: {
+            name: {#xtitle#},
+            withLabel: true,
+            label: {
+                position: 'rt',
+                fontSize: 18,
+          offset: [-150, -35] // Position of the axis title
+            },
+            ticks: {
+                label: {
+                    visible: true,
+                    anchorX: 'middle',
+                    anchorY: 'top',
+                    fontSize: 18,
+                    offset: [0, -3] 
+                },
+                drawZero: false,
+                visible: 'inherit'
+            }
+        },
+        y: {
+            name:{#ytitle#} ,
+            withLabel: true,
+            label: {
+                position: 'rt',
+                fontSize: 18,
+                rotate:90,
+                // Adjusted offset for the title to sit cleanly in the larger margin
+                offset: [-30, -150], 
+                display: 'internal',
+            },
+            ticks: {
+                label: {
+                    visible:false,
+                    anchorX: 'right',
+                    anchorY: 'middle',
+                    fontSize: 18,
+                    offset: [-6, 0] // Pushed into the 100px margin
+                },
+                tickEndings: [1, 0],
+                drawZero: false,
+                visible: true    
+            }
+        }
+    } 
+});
+
+// --- 4. Plotting Elements ---
 board.highlightInfobox = function(x, y , el) {
-		this.infobox.setText('<span style="color:black;font-weight:bold">'+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+y + 'M' +'</span>');
+    this.infobox.setText('<span style="color:black;font-weight:bold">'+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+x+ 'mL' +'</span>');
 };
 
-var p1 = [], p2=[],p3=[],p4=[],p5=[],col = 'red'; 
-var x1={#x1#},x2={#x2#},x3={#x3#},x4={#x4#};
+var p1 = [], p2=[],p3=[],p4=[],p5=[],col = 'red';  
 
-board.setBoundingBox([-10,50,x4[0]+10,-10]);
-board.fullUpdate();
-// 1. Define the three points
-var p1 = board.create('point',x1, {name: 'A'});
-var p2 = board.create('point',x2, {name: 'B'});
-var p3 = board.create('point',x3, {name: 'C'});
-var p4 = board.create('point',x4, {name: 'D'});
+// Define the points and set fixed: true
+var p1 = board.create('point',x1, {name: 'A', fixed: true});
+var p2 = board.create('point',x2, {name: 'B', fixed: true});
+var p3 = board.create('point',x3, {name: 'C', fixed: true});
+var p4 = board.create('point',x4, {name: 'D', fixed: true});
+var p5= board.create('point',x5, {name: 'E', visible:false,fixed: true});
 
-// 2. Create the polygonal chain
-// This creates a segment from A to B, and a second segment from B to C.
-var chain = board.create('polygonalchain', [p1, p2, p3,p4], {
+// Create the polygonal chain
+var chain = board.create('polygonalchain', [p1, p2, p3,p4,p5], {
     strokeColor: 'red',
     strokeWidth: 3
 });
 
-
 board.fullUpdate(); 
 
- [[/jsxgraph]]
- 
+[[/jsxgraph]]
