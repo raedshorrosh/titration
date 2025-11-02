@@ -9,7 +9,7 @@ var allPoints=[x1,x2,x3,x4,x5];
 
 // Define container size and margins in pixels
 var containerSize = 800;
-// 🔥 INCREASED MARGINS
+// 🔥 INCREASED MARGINS TO 100 PIXELS
 var leftMargin = 60;   // Guaranteed space for Y-axis labels
 var bottomMargin = 60; // Guaranteed space for X-axis labels
 var topRightMargin = 20; // Small buffer for the other edges
@@ -79,7 +79,7 @@ var board = JXG.JSXGraph.initBoard(divid, {
                 fontSize: 18,
                 rotate:90,
                 // Adjusted offset for the title to sit cleanly in the larger margin
-                offset: [-30, -150], 
+                offset: [-30, -200], 
                 display: 'internal',
             },
             ticks: {
